@@ -1,0 +1,45 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class RawObjectSpawner : MonoBehaviour
+{
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public GameObject prefab; //Prefab to spawned instances from
+	public Vector2 timeRange = new Vector2(0.2f, 0.6f);
+	public float yRange = 8f;
+	float m_lastSpawnTime = 0;
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Setup
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	void Awake()
+	{
+		m_lastSpawnTime = Random.Range (timeRange.x, timeRange.y);
+	}
+
+	void Update()
+	{
+		//Check if its time to spawn another object
+		m_lastSpawnTime -= Time.deltaTime;
+		if (m_lastSpawnTime <= 0)
+		{
+			m_lastSpawnTime = Random.Range(timeRange.x, timeRange.y);
+			SpawnObject();
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//Spawn a random object with random y position
+	public virtual void SpawnObject()
+	{
+		GameObject newObject = Instantiate(prefab);
+		newObject.transform.position = transform.position - new Vector3(2f, Random.Range(0f, yRange) - (yRange / 2), 0f);
+	}
+}
